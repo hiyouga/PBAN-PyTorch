@@ -129,7 +129,7 @@ class Tokenizer(object):
     
     @staticmethod
     def split_text(text):
-        for ch in ["\'s", "\'ve", "n\'t", "\'re", "\'m", "\'d", "\'ll", ",", ".", "!", "*", "/", "?", "(", ")", "\""]:
+        for ch in ["\'s", "\'ve", "n\'t", "\'re", "\'m", "\'d", "\'ll", ",", ".", "!", "*", "/", "?", "(", ")", "\"", "-", ":"]:
             text = text.replace(ch, " "+ch+" ")
         return text.strip().split()
 

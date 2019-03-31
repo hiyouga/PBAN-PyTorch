@@ -11,7 +11,7 @@
 * Python 3.6
 * GloVe pre-trained word vectors:
   * Download pre-trained word vectors [here](https://github.com/stanfordnlp/GloVe#download-pre-trained-word-vectors).
-  * Extract the [glove.twitter.27B.zip](http://nlp.stanford.edu/data/wordvecs/glove.twitter.27B.zip) and [glove.42B.300d.zip](http://nlp.stanford.edu/data/wordvecs/glove.42B.300d.zip) to the `glove` directory.
+  * Extract the [glove.twitter.27B.zip](http://nlp.stanford.edu/data/wordvecs/glove.twitter.27B.zip) and [glove.42B.300d.zip](http://nlp.stanford.edu/data/wordvecs/glove.42B.300d.zip) to the `\glove\` folder.
 
 ## Dataset
 
@@ -19,19 +19,17 @@ Based on the restaurant and laptop dataset of [SemEval-2014 Task 4](http://alt.q
 
 ### Restaurant Dataset
 
-| Polarity | #Train | #Test |
-| -------- | ------ | ----- |
-| Positive | 2164   | 728   |
-| Negative | 807    | 196   |
-| Neutral  | 637    | 196   |
+| Polarity | #Positive | #Negative | #Neutral |
+| -------- | --------- | --------- | -------- |
+| Train    | 2164      | 807       | 637      |
+| Test     | 728       | 196       | 196      |
 
 ### Laptop Dataset
 
-| Polarity | #Train | #Test |
-| -------- | ------ | ----- |
-| Positive | 994    | 341   |
-| Negative | 870    | 128   |
-| Neutral  | 464    | 169   |
+| Polarity | #Positive | #Negative | #Neutral |
+| -------- | --------- | --------- | -------- |
+| Train    | 994       | 870       | 464      |
+| Test     | 341       | 128       | 169      |
 
 ## Usage
 
@@ -65,37 +63,37 @@ Gu, Shuqin, et al. "A Position-aware Bidirectional Attention Network for Aspect-
 
 #### Three-class
 
-| Model     | In Paper | This Code |
-| --------- | -------- | --------- |
-| LSTM      | 74.28    | 77.68     |
-| ATAE-LSTM | 77.20    | 78.30     |
-| PBAN      | 81.16    | 80.18     |
+| Model     | In Paper  | This Code |
+| --------- | --------- | --------- |
+| LSTM      | 74.28     | 77.68     |
+| ATAE-LSTM | 77.20     | 78.30     |
+| PBAN      | **81.16** | **80.18** |
 
 #### Two-class
 
-| Model     | In Paper | This Code |
-| --------- | -------- | --------- |
-| LSTM      | -        | -         |
-| ATAE-LSTM | 90.90    | 90.26     |
-| PBAN      | 91.67    | 92.32     |
+| Model     | In Paper  | This Code |
+| --------- | --------- | --------- |
+| LSTM      | -         | -         |
+| ATAE-LSTM | 90.90     | 90.26     |
+| PBAN      | **91.67** | **92.32** |
 
 ### Laptop Dataset
 
 #### Three-class
 
-| Model     | In Paper | This Code |
-| --------- | -------- | --------- |
-| LSTM      | 66.45    | 71.00     |
-| ATAE-LSTM | 68.70    | 71.32     |
-| PBAN      | 74.12    | 73.82     |
+| Model     | In Paper  | This Code |
+| --------- | --------- | --------- |
+| LSTM      | 66.45     | 71.00     |
+| ATAE-LSTM | 68.70     | 71.32     |
+| PBAN      | **74.12** | **73.82** |
 
 #### Two-class
 
-| Model     | In Paper | This Code |
-| --------- | -------- | --------- |
-| LSTM      | -        | -         |
-| ATAE-LSTM | 87.60    | 87.63     |
-| PBAN      | 87.81    | 87.42     |
+| Model     | In Paper  | This Code |
+| --------- | --------- | --------- |
+| LSTM      | -         | -         |
+| ATAE-LSTM | 87.60     | **87.63** |
+| PBAN      | **87.81** | 87.42     |
 
 ## Acknowledgements
 
