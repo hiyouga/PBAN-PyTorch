@@ -37,12 +37,10 @@ class DynamicLSTM(nn.Module):
         x_sort_idx = torch.sort(x_len, descending=True)[1].long()
         x_unsort_idx = torch.sort(x_sort_idx)[1].long()
         x_len = x_len[x_sort_idx]
-        if self.batch_first:
-            x = x[x_sort_idx]
-        else:
-            x = x[:, x_sort_idx]
+        x = x[x_sort_idx]
         '''pack'''
         x_emb_p = torch.nn.utils.rnn.pack_padded_sequence(x, x_len, batch_first=self.batch_first)
+        ''' process '''
         if self.rnn_type == 'LSTM':
             out_pack, (ht, ct) = self.RNN(x_emb_p, None)
         else:
@@ -78,10 +76,7 @@ class SqueezeEmbedding(nn.Module):
         x_sort_idx = torch.sort(x_len, descending=True)[1].long()
         x_unsort_idx = torch.sort(x_sort_idx)[1].long()
         x_len = x_len[x_sort_idx]
-        if self.batch_first:
-            x = x[x_sort_idx]
-        else:
-            x = x[:, x_sort_idx]
+        x = x[x_sort_idx]
         '''pack'''
         x_emb_p = torch.nn.utils.rnn.pack_padded_sequence(x, x_len, batch_first=self.batch_first)
         '''unpack'''

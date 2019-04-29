@@ -33,8 +33,16 @@ Based on the restaurant and laptop dataset of [SemEval-2014 Task 4](http://alt.q
 
 ## Usage
 
+Train the model:
+
 ```sh
-python train.py
+python train.py --model_name pban --dataset restaurant
+```
+
+Show help message and exit:
+
+```sh
+python train.py -h
 ```
 
 ## Implemented models
@@ -67,7 +75,7 @@ Gu, Shuqin, et al. "A Position-aware Bidirectional Attention Network for Aspect-
 | --------- | --------- | --------- |
 | LSTM      | 74.28     | 77.68     |
 | ATAE-LSTM | 77.20     | 78.30     |
-| PBAN      | **81.16** | **80.18** |
+| PBAN      | **81.16** | **80.89** |
 
 #### Two-class
 
@@ -85,7 +93,7 @@ Gu, Shuqin, et al. "A Position-aware Bidirectional Attention Network for Aspect-
 | --------- | --------- | --------- |
 | LSTM      | 66.45     | 71.00     |
 | ATAE-LSTM | 68.70     | 71.32     |
-| PBAN      | **74.12** | **73.82** |
+| PBAN      | **74.12** | **74.76** |
 
 #### Two-class
 

@@ -1,72 +1,11 @@
 import os
 import torch
 import torch.nn as nn
+import argparse
 from sklearn import metrics
 from torch.utils.data import DataLoader
 from models import LSTM, AE_LSTM, ATAE_LSTM, PBAN
 from data_utils import SentenceDataset, build_tokenizer, build_embedding_matrix
-
-class Options:
-    ''' Hyper Parameters '''
-    def __init__(self):
-        self.model_name = 'pban'
-        self.dataset = 'restaurant'
-        self.optimizer = 'adam'
-        self.initializer = 'xavier_uniform_'
-        self.learning_rate = 0.001
-        self.dropout = 0
-        self.l2reg = 0.00001
-        self.num_epoch = 20
-        self.batch_size = 128
-        self.log_step = 5
-        self.embed_dim = 300
-        self.hidden_dim = 200
-        self.position_dim = 100
-        self.max_length = 80
-        self.polarities_dim = 3
-        self.device = None
-        model_classes = {
-            'lstm': LSTM,
-            'ae_lstm': AE_LSTM,
-            'atae_lstm': ATAE_LSTM,
-            'pban': PBAN
-        }
-        dataset_files = {
-            'restaurant': {
-                'train': './datasets/Restaurants_Train.xml',
-                'test': './datasets/Restaurants_Test.xml'
-            },
-            'laptop': {
-                'train': './datasets/Laptops_Train.xml',
-                'test': './datasets/Laptops_Test.xml'
-            }
-        }
-        input_colses = {
-            'lstm': ['text'],
-            'ae_lstm': ['text', 'aspect'],
-            'atae_lstm': ['text', 'aspect'],
-            'pban': ['text', 'aspect', 'position']
-        }
-        initializers = {
-            'xavier_uniform_': torch.nn.init.xavier_uniform_,
-            'xavier_normal_': torch.nn.init.xavier_normal_,
-            'orthogonal_': torch.nn.init.orthogonal_,
-        }
-        optimizers = {
-            'adadelta': torch.optim.Adadelta,  # default lr=1.0
-            'adagrad': torch.optim.Adagrad,    # default lr=0.01
-            'adam': torch.optim.Adam,          # default lr=0.001
-            'adamax': torch.optim.Adamax,      # default lr=0.002
-            'asgd': torch.optim.ASGD,          # default lr=0.01
-            'rmsprop': torch.optim.RMSprop,    # default lr=0.01
-            'sgd': torch.optim.SGD,
-        }
-        self.model_class = model_classes[self.model_name]
-        self.dataset_file = dataset_files[self.dataset]
-        self.inputs_cols = input_colses[self.model_name]
-        self.initializer = initializers[self.initializer]
-        self.optimizer = optimizers[self.optimizer]
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') if self.device is None else torch.device(self.device)
 
 class Instructor:
     ''' Model training and evaluation '''
@@ -116,7 +55,7 @@ class Instructor:
         max_f1 = 0
         global_step = 0
         for epoch in range(self.opt.num_epoch):
-            print('>' * 100)
+            print('>' * 50)
             print('epoch:', epoch)
             n_correct, n_total = 0, 0
             for i_batch, sample_batched in enumerate(self.train_dataloader):
@@ -184,9 +123,83 @@ class Instructor:
             print('max_test_acc: {0}, max_f1: {1}'.format(max_test_acc, max_f1))
             max_test_acc_overall = max(max_test_acc, max_test_acc_overall)
             max_f1_overall = max(max_f1, max_f1_overall)
-            print('#' * 100)
+            print('#' * 50)
         print('max_test_acc_overall:', max_test_acc_overall)
         print('max_f1_overall:', max_f1_overall)
 
+def main():
+    
+    model_classes = {
+        'lstm': LSTM,
+        'ae_lstm': AE_LSTM,
+        'atae_lstm': ATAE_LSTM,
+        'pban': PBAN
+    }
+    
+    dataset_files = {
+        'restaurant': {
+            'train': './datasets/Restaurants_Train.xml',
+            'test': './datasets/Restaurants_Test.xml'
+        },
+        'laptop': {
+            'train': './datasets/Laptops_Train.xml',
+            'test': './datasets/Laptops_Test.xml'
+        }
+    }
+    
+    input_colses = {
+        'lstm': ['text'],
+        'ae_lstm': ['text', 'aspect'],
+        'atae_lstm': ['text', 'aspect'],
+        'pban': ['text', 'aspect', 'position']
+    }
+    
+    initializers = {
+        'xavier_uniform_': torch.nn.init.xavier_uniform_,
+        'xavier_normal_': torch.nn.init.xavier_normal_,
+        'orthogonal_': torch.nn.init.orthogonal_,
+    }
+    
+    optimizers = {
+        'adadelta': torch.optim.Adadelta,  # default lr=1.0
+        'adagrad': torch.optim.Adagrad,    # default lr=0.01
+        'adam': torch.optim.Adam,          # default lr=0.001
+        'adamax': torch.optim.Adamax,      # default lr=0.002
+        'asgd': torch.optim.ASGD,          # default lr=0.01
+        'rmsprop': torch.optim.RMSprop,    # default lr=0.01
+        'sgd': torch.optim.SGD,
+    }
+    
+    # Hyperparameters
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name', default='pban', type=str, help=', '.join(model_classes.keys()))
+    parser.add_argument('--dataset', default='restaurant', type=str, help=', '.join(dataset_files.keys()))
+    parser.add_argument('--optimizer', default='adam', type=str, help=', '.join(optimizers.keys()))
+    parser.add_argument('--initializer', default='xavier_uniform_', type=str, help=', '.join(initializers.keys()))
+    parser.add_argument('--learning_rate', default=1e-3, type=float)
+    parser.add_argument('--dropout', default=0, type=float)
+    parser.add_argument('--l2reg', default=1e-5, type=float)
+    parser.add_argument('--num_epoch', default=20, type=int)
+    parser.add_argument('--batch_size', default=64, type=int)
+    parser.add_argument('--log_step', default=5, type=int)
+    parser.add_argument('--embed_dim', default=300, type=int)
+    parser.add_argument('--hidden_dim', default=200, type=int)
+    parser.add_argument('--position_dim', default=100, type=int)
+    parser.add_argument('--polarities_dim', default=3, type=int, help='2, 3')
+    parser.add_argument('--max_length', default=80, type=int)
+    parser.add_argument('--device', default=None, type=str, help='cpu, cuda')
+    parser.add_argument('--repeats', default=1, type=int)
+    opt = parser.parse_args()
+    	
+    opt.model_class = model_classes[opt.model_name]
+    opt.dataset_file = dataset_files[opt.dataset]
+    opt.inputs_cols = input_colses[opt.model_name]
+    opt.initializer = initializers[opt.initializer]
+    opt.optimizer = optimizers[opt.optimizer]
+    opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') if opt.device is None else torch.device(opt.device)
+    
+    ins = Instructor(opt)
+    ins.run(opt.repeats)
+
 if __name__ == '__main__':
-    Instructor(Options()).run(3)
+    main()
